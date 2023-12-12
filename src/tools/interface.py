@@ -4,11 +4,8 @@ from tools import config, sql
 class Model:
     def __init__(self):
         self._conn = None
-        self._path = None
-        self._config = []
-        self._tables = []
  
-    def connect_to_path(self, path):
+    def connect_to_db_from_file(self, path):
         cfg = config.parse(path)
         conn = sql.connect(cfg)
         self._conn = conn
@@ -69,9 +66,13 @@ class MyWindow(wx.Frame):
             style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST
             )
         if dialog.ShowModal() == wx.ID_OK:
-            self.model.connect_to_path(dialog.GetPath())
-            self.update_clb()
-            self.enable_buttons()
+            try:
+                self.model.connect_to_db_from_file(dialog.GetPath())
+            except Exception as e:
+                wx.MessageBox(str(e), "Hiba", wx.OK | wx.ICON_WARNING)
+            else:
+                self.update_clb()
+                self.enable_buttons()
         dialog.Destroy()
 
     def on_save_button_click(self, event):
@@ -101,7 +102,8 @@ class MyWindow(wx.Frame):
         return items
 
     def on_refresh_button_click(self, event):
-        self.update_clb()
+        self.clb.Clear()
+        self.clb.InsertItems(self.model.get_tables(), 0)
     
     def update_clb(self):
         self.clb.Clear()
