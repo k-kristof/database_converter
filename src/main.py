@@ -1,12 +1,8 @@
-from tools import config, sql, interface
+from tools import interface
 
 def main():
-    conf = config.parse('server.conf')
-    conn = sql.connect(conf)
-    curs = conn.cursor()
-
     app = interface.wx.App(False)
-    interface.MyWindow(parent=None, title='Database Converter', cursor=curs)
+    interface.MyWindow(parent=None, title='Database Converter')
     app.MainLoop()
 
     return 0
