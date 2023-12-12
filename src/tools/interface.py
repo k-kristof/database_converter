@@ -38,7 +38,7 @@ class MyWindow(wx.Frame):
  
         # tábla listát frissítő gomb
         refresh_button = wx.Button(panel, label="Frissítés")
-        refresh_button.Bind(wx.EVT_BUTTON, self.on_refresh_button_click)
+        refresh_button.Bind(wx.EVT_BUTTON, self.refresh_checklistbox)
         self.refresh_button = refresh_button
         refresh_button.Disable()
         button_grid.Add(refresh_button, 0, wx.EXPAND | wx.ALL, 5)
@@ -71,7 +71,7 @@ class MyWindow(wx.Frame):
             except Exception as e:
                 wx.MessageBox(str(e), "Hiba", wx.OK | wx.ICON_WARNING)
             else:
-                self.update_clb()
+                self.refresh_checklistbox()
                 self.enable_buttons()
         dialog.Destroy()
 
@@ -101,11 +101,7 @@ class MyWindow(wx.Frame):
                 items.append(self.clb.GetString(item))
         return items
 
-    def on_refresh_button_click(self, event):
-        self.clb.Clear()
-        self.clb.InsertItems(self.model.get_tables(), 0)
-    
-    def update_clb(self):
+    def refresh_checklistbox(self, event=None):
         self.clb.Clear()
         self.clb.InsertItems(self.model.get_tables(), 0)
 
