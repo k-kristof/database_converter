@@ -78,15 +78,13 @@ class MyWindow(wx.Frame):
     def on_save_button_click(self, event):
         selected_items = self.get_selected_items()
         if selected_items:
-            suggested_names = ' '.join([f'"{table}.csv"' for table in selected_items])
-            dialog = wx.FileDialog(
+            dialog = wx.DirDialog(
                 self, message="Kijelölt táblák mentése",
                 style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT
             )
-            dialog.SetFilename(suggested_names)
  
             if dialog.ShowModal() == wx.ID_OK:
-                directory = dialog.GetDirectory()
+                directory = dialog.GetPath()
                 for table in selected_items:
                     self.model.export_table(directory, table)
                 wx.MessageBox("Táblák sikeresen elmentve.", "Siker", wx.OK | wx.ICON_INFORMATION)
